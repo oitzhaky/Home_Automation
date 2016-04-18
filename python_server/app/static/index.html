@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Open Application</title>
+    <style>
+      a.button {
+    background:#eee;
+    text-decoration:none;
+    color:#333;
+    font-family:Arial, sans-serif;
+    font-size:11px;
+    font-weight:bold;
+    padding:3px 5px;
+    border:1px solid #aaa;
+    border-radius:3px;
+    cursor:default;
+}
+
+a.button:hover {
+    background-color:#f2f2f2;
+    border-color:#888;
+    box-shadow:0 0 2px #ccc;
+}
+
+a.button:active {
+    vertical-align:-1px;
+}
+        .row{
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row"><a data-command="on" class="button command"   href="#">Light On</a></div>
+    <div class="row"><a data-command="off" class="button command" href="#">Light Off</a></div>
+    <label id = "lbl_res"></label>
+</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.3.0/annyang.min.js"></script>
+    <script>
+    function change_light(command){
+        var url = command === "on"? "/lightsOn" :"/lightsOff";
+        $.post(url,function(data){
+                $('#lbl_res').html(data);
+        })
+        .fail(function() {
+            alert( "error" );
+        });
+    }
+    $(function(){
+        $('.button.command').click(function(){
+            var command = $(this).data("command");
+            change_light(command);
+        }); 
+        if (annyang) {
+        //annyang.setLanguage(‘he’);
+        // Let's define our first command. First the text we expect, and then the function it should call
+            var commands = {
+                'on': function(){
+                    change_light("on");
+                    annyang.abort();
+                    annyang.start();
+                }, 
+                'down': function(){
+                    change_light("off");
+                    annyang.abort();
+                    annyang.start();
+                }
+            };
+            
+          //  annyang.addCallback('result', function(say) {
+          //      $('#lbl_res').text(say);
+          //  });
+          // Add our commands to annyang
+          annyang.addCommands(commands);
+
+          // Start listening. You can call this here, or attach this call to an event, button, etc.
+          annyang.start();
+        }
+    });
+    </script>
+</html>
