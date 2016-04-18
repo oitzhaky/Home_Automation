@@ -1,2 +1,2 @@
 # Home_Automation
-A new project
+Spring semester project
