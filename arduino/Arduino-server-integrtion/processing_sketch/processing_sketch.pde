@@ -21,7 +21,7 @@ http://projects.sindrelindstad.com
 }
  void draw() {
  
-  String onoroff[] = loadStrings("http://10.0.0.4:555/file.txt"); // Insert the location of your .txt file
+  String onoroff[] = loadStrings("http://10.0.0.41:555/file.txt"); // Insert the location of your .txt file
   print(onoroff[0]);  // Prints whatever is in the file ("1" or "0")
  
   if (onoroff[0].equals("1") == true) {
@@ -34,5 +34,5 @@ http://projects.sindrelindstad.com
     port.write('L');  // Send "L" over serial to set LED to LOW
  }
  
-  delay(7000); // Set your desired interval here, in milliseconds
+  delay(100); // Set your desired interval here, in milliseconds
  }
