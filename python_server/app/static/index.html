@@ -1,82 +1,123 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Open Application</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Application</title>
     <style>
-      a.button {
-    background:#eee;
-    text-decoration:none;
-    color:#333;
-    font-family:Arial, sans-serif;
-    font-size:11px;
-    font-weight:bold;
-    padding:3px 5px;
-    border:1px solid #aaa;
-    border-radius:3px;
-    cursor:default;
-}
-
-a.button:hover {
-    background-color:#f2f2f2;
-    border-color:#888;
-    box-shadow:0 0 2px #ccc;
-}
-
-a.button:active {
-    vertical-align:-1px;
-}
-        .row{
-            margin: 10px;
+        .my-app button.command {
+            border-radius: 100%
         }
+        
+        .my-app .row {
+            padding: 15px 0;
+        }
+        
+        .my-app .col {}
+        
+        .my-app .row .title {
+            font-size: 10px
+        }
+        
+        .my-app .my-container {
+            margin: 0 auto;
+            width: 50px;
+            margin-top: 35px;
+        }
+        
+        .btn:focus {
+            outline: none;
+        }
+
     </style>
 </head>
+
 <body>
-    <div class="row"><a data-command="on" class="button command"   href="#">Light On</a></div>
-    <div class="row"><a data-command="off" class="button command" href="#">Light Off</a></div>
-    <label id = "lbl_res"></label>
+    <div class="my-app">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="my-container">
+                    <button data-command="on" class="btn btn-default command glyphicon glyphicon-eye-open" type="button"></button>
+                    <span class="title">lights on</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="my-container">
+                    <button data-command="off" class="btn btn-default command glyphicon glyphicon-eye-close" type="button"></button>
+                    <span class="title">lights off</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="my-container">
+                    <button data-command="play" class="btn btn-default command glyphicon glyphicon-music" type="button"></button>
+                    <span class="title">play music</span>
+                </div>
+            </div>
+        </div>
+        <label id="lbl_res"></label>
+    </div>
 </body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.3.0/annyang.min.js"></script>
-    <script>
-    function change_light(command){
-        var url = command === "on"? "/lightsOn" :"/lightsOff";
-        $.post(url,function(data){
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.3.0/annyang.min.js"></script>
+<script>
+    function runCommand(command) {
+        switch (command) {
+            case "on":
+                url = "/lightsOn";
+                break;
+            case "off":
+                url = "/lightsOff";
+                break;
+            case "play":
+                url = "/playMusic";
+                break;
+        }
+        $.post(url, function(data) {
                 $('#lbl_res').html(data);
-        })
-        .fail(function() {
-            alert( "error" );
-        });
+            })
+            .fail(function() {
+                alert("error");
+            });
     }
-    $(function(){
-        $('.button.command').click(function(){
+    $(function() {
+        $('.command').click(function() {
             var command = $(this).data("command");
-            change_light(command);
-        }); 
+            runCommand(command);
+        });
         if (annyang) {
-        //annyang.setLanguage(‘he’);
-        // Let's define our first command. First the text we expect, and then the function it should call
+            //annyang.setLanguage(‘he’);
+            // Let's define our first command. First the text we expect, and then the function it should call
             var commands = {
-                'on': function(){
-                    change_light("on");
+                'lights on': function() {
+                    runCommand("on");
                     annyang.abort();
                     annyang.start();
-                }, 
-                'down': function(){
-                    change_light("off");
+                },
+                'lights off': function() {
+                    runCommand("off");
+                    annyang.abort();
+                    annyang.start();
+                },
+                'play music': function() {
+                    runCommand("play");
                     annyang.abort();
                     annyang.start();
                 }
             };
-            
-          //  annyang.addCallback('result', function(say) {
-          //      $('#lbl_res').text(say);
-          //  });
-          // Add our commands to annyang
-          annyang.addCommands(commands);
 
-          // Start listening. You can call this here, or attach this call to an event, button, etc.
-          annyang.start();
+            annyang.addCallback('result', function(say) {
+                //                $('#lbl_res').text(say);
+            });
+            // Add our commands to annyang
+            annyang.addCommands(commands);
+
+            // Start listening. You can call this here, or attach this call to an event, button, etc.
+            annyang.start();
         }
     });
-    </script>
+
+</script>
+
 </html>
