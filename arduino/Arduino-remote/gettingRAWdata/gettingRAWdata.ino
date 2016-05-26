@@ -25,10 +25,10 @@ void dump(decode_results *results) {
    
 	if ((i % 2) == 1) {
   	Serial.print("+");
-  	Serial.print(results->rawbuf[i]*USECPERTICK, BIN);
+  	Serial.print(results->rawbuf[i]*USECPERTICK, DEC);
 	}
 	else {
-  	Serial.print(-(int)results->rawbuf[i]*USECPERTICK, BIN);
+  	Serial.print(-(int)results->rawbuf[i]*USECPERTICK, DEC);
 	}
 	Serial.print(" ");
   }
@@ -40,10 +40,10 @@ void dump(decode_results *results) {
   for (int i = 1; i < count; i++) {
    
 	if ((i % 2) == 1) {
-  	Serial.print(results->rawbuf[i]*USECPERTICK, BIN);
+  	Serial.print(results->rawbuf[i]*USECPERTICK, DEC);
 	}
 	else {
-  	Serial.print((int)results->rawbuf[i]*USECPERTICK, BIN);
+  	Serial.print((int)results->rawbuf[i]*USECPERTICK, DEC);
 	}
 	Serial.print(",");
   }

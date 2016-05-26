@@ -29,24 +29,31 @@ void setup()
 }
 
 void loop() {
+  
   int khz = 38; // 38kHz carrier frequency for the NEC protocol
-unsigned int deg26[74] = {8900,4450,650,1650,650,550,650,550,650,1600,650,550,650,1650,650,550,650,550,650,500,700,1600,650,550,650,1650,650,550,650,550,600,550,650,550,650,550,650,550,650,550,650,550,650,550,650,1600,700,1600,700,500,650,1650,650,500,700,500,700,500,650,1650,650,550,650,1600,700,500,650,550,650,1650,650,550,650,};
-unsigned int deg25[74] = {8900,4450,700,1600,650,550,650,550,650,1600,700,500,700,1600,650,550,650,550,650,1600,700,500,700,500,700,1600,650,550,650,550,650,550,650,500,700,500,650,550,700,500,650,550,650,550,650,1650,650,1600,700,500,700,1600,650,550,650,550,650,550,600,1650,700,500,700,1600,650,550,650,550,650,1600,700,500,700,};
+unsigned int low21[101] = {3100,2950,1000,850,1050,950,1000,1800,2000,900,1050,900,1050,900,1000,900,1050,850,1050,1800,2050,1800,1100,850,2000,950,1000,900,1000,900,1050,900,1050,900,1000,850,1100,850,1050,850,1100,900,1000,900,1000,900,1000,1000,950,900,1000,950,1000,950,1000,850,1100,900,950,1950,1900,950,3000,2850,1050,950,950,950,1000,1850,2000,900,1050,850,1050,900,1050,850,1050,900,1000,1850,2000,1850,1100,850,2000,900,1050,850,1050,900,1050,850,1050,900,1050,850,1050,900,};
+unsigned int high21[101] = {3100,2800,1100,900,1000,850,1100,1800,1050,900,1050,850,2000,950,1000,900,1050,850,1050,1850,2000,1850,1100,800,2000,950,1000,900,1000,1000,1000,850,1050,850,1100,850,1000,950,1000,900,1000,1000,950,950,950,950,1050,850,1000,950,1000,950,1000,850,1100,850,1050,850,1100,1800,2000,900,3000,2900,1000,1000,1000,850,1050,1800,1100,850,1100,850,2000,850,1100,850,1000,950,1000,1850,2000,1900,1000,850,2050,850,1100,850,1050,850,1050,950,950,950,1000,950,1000,850,};
 
+      irsend.sendRaw(low21, sizeof(low21) / sizeof(low21[0]), khz); //Note the approach used to automatically calculate the size of the array.
+       Serial.println(" AC ON");
+
+       delay(3000);
+       
+      irsend.sendRaw(high21, sizeof(high21) / sizeof(high21[0]), khz); //Note the approach used to automatically calculate the size of the array.
+      Serial.println("AC low fan");   
+ /* 
   // see if there's incoming serial data:
   if (Serial.available() > 0) {
     // read the oldest byte in the serial buffer:
     incomingString = Serial.read();
-    if (incomingString == "26 degrees") {
-       irsend.sendRaw(deg26, sizeof(deg26) / sizeof(deg26[0]), khz); //Note the approach used to automatically calculate the size of the array.
-       Serial.println("changing AC to 26 degrees");
+    if (incomingString == "ON") {
+    
     }
-    if (incomingString == "25 degrees") {
-      irsend.sendRaw(deg25, sizeof(deg25) / sizeof(deg25[0]), khz); //Note the approach used to automatically calculate the size of the array.
-      Serial.println("changing AC to 25 degrees");
+    if (incomingString == "LOW") {
+  
     }
   }
-
+*/
 }
 
  
