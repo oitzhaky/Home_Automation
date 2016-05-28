@@ -17,11 +17,11 @@ We made this using these technologies.
 
 ## Getting Started
 Preliminaries :
-* Python 3.4
+* Python 3.x
 * virtualenv (optional)
-* npm
+* flask
 
 You have to git clone this repository.
 ```
-git clone https://github.com/shalomeir/snippod-boilerplate
+git clone https://github.com/oitzhaky/Home_Automation.git
 ```
