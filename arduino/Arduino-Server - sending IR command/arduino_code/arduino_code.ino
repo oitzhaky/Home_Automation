@@ -7,6 +7,7 @@ IRrecv irrecv(RECV_PIN);
 decode_results results;
 //unsigned int info[500];
 int count;
+IRsend irsend;
 
 void setup(){
   // Open serial connection.
@@ -19,19 +20,20 @@ void setup(){
 void dump(decode_results *results) {
   
   count = results->rawlen;
-  Serial.print(count);
+  Serial.println(count);
 
-  delay(500);
-  
+  delay(100);
+ 
   for (int i = 1; i < count; i++) {
    
     if ((i % 2) == 1) {
-    Serial.print(results->rawbuf[i]*USECPERTICK,DEC);
+    Serial.println(results->rawbuf[i]*USECPERTICK,DEC);
     }else {
-    Serial.print((int)results->rawbuf[i]*USECPERTICK,DEC);
+    Serial.println((int)results->rawbuf[i]*USECPERTICK,DEC);
     }
-    delay(500);
+    delay(50);
   }
+  
 }
 
 
@@ -60,21 +62,40 @@ void loop(){
         while(1){
           if (irrecv.decode(&results)) {
             dump(&results);
-            //delay(1000);
             //irrecv.resume();
            // Serial.write( (uint8_t*)info, sizeof(info) );
            break;
-           // delay(5000);
           }
         }
-        delay(5000);
+        delay(1000);
         
-        Serial.write('c');
+        //Serial.write('c');
         break;
      
         case 's':
-          break;
-        }
+            delay(100);
+            int size = Serial.parseInt();
+            //Serial.println("Size is: ");
+            Serial.println(size);
+            unsigned int data[size];
+           //Serial.println(" { ");
+           
+            for(int i =0; i < size; i++){
+              data[i] = Serial.parseInt();
+              delay(50);
+              Serial.println(data[i]);
+            
+            }
+            //Serial.println(" } ");
+
+            while (1){
+               int khz = 38; // 38kHz carrier frequency for the NEC protocol
+               irsend.sendRaw(data, sizeof(data) / sizeof(data[0]), khz); //Note the approach used to automatically calculate the size of the array.
+               delay(1000);
+            }
+              break;
+       
+         }
   }
 }
 

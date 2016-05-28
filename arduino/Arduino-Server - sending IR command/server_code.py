@@ -35,22 +35,68 @@ time.sleep(2)
 count = ser.readline().decode("utf-8")  #reads first line
 print ('Arduino says:', count)
 time.sleep(3)
-byteSize = ser.read() #reads 1 bytes(size of data)
-size = int.from_bytes(byteSize, byteorder='big')
-print('Data Size is:',size)
+dataSize = ser.readline() #reads 1 bytes(size of data)
+print('Data Size is:', int(dataSize))
 
-#printing the array of data
-for num in range(0, size):
-    print(int.from_bytes(ser.read(), byteorder='big'))
-    time.sleep(1)
-#arr = ser.read(int(size))
+data = []
+x = 1
 
-#print ('Data is: ', int(arr))
+while x <= int(dataSize):
+    data.append(ser.readline().strip())
+    x = x + 1
+
+print('unsigned int raw[',end="")
+print(int(dataSize),end="")
+print('] = ',end="")
+print('{ ',end="")
+for x in range(int(dataSize)-1):
+    print(data[x], end="")
+    print(',',end="")
+print(' };')
+
+# print('unsigned int raw[',end="")
+# print(int(dataSize),end="")
+# print('] = ',end="")
+# print('{ ',end="")
+# #printing the array of data
+# for num in range(1, int(dataSize)):
+#     #print(int.from_bytes(ser.read(), byteorder='big'))
+#     print(int(ser.readline()),end="")
+#     print(',',end="")
+#     time.sleep(0.5)
+# print(' };')
+
 
 ## Wait until the arduino tells us it
 ## is finished blinking
 ##if ser.read() == '1':
 ##    ser.read()
+
+var=int(dataSize)
+ser.write(b's')
+ser.write(str(var).encode())
+time.sleep(1)
+dataSize = ser.readline() #reads 1 bytes(size of data)
+print('on Arduino side,data Size is:', int(dataSize))
+
+for x in range(int(dataSize)-1):
+    ser.write(str(data[x]).encode())
+    time.sleep(1)
+
+#count = ser.readline().decode("utf-8")  #reads first line
+#print ('Arduino says:', count)
+#time.sleep(3)
+
+print('on Arduino side,unsigned int raw[',end="")
+print(int(dataSize),end="")
+print('] = ',end="")
+print('{ ',end="")
+for x in range(int(dataSize)-1):
+    print(ser.readline().strip(), end="")
+    print(',',end="")
+print(' };')
+
+
 
 ## close the port and end the program
 print ('closing port')
