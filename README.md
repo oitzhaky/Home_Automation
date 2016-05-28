@@ -1,4 +1,4 @@
-# IoT Project - Smart Home
+# **IoT Project - Smart Home**
 
 ##Overview
 This project is based on:
