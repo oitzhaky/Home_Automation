@@ -1,0 +1,7 @@
+416576721165 //project ID
+
+AIzaSyCZ31BrLMpWpdwsKG9nqKQnDpLoERZnvEc //API key
+
+https://android.googleapis.com/gcm/send/d5e7iwh_es4:APA91bGt-zP4Qc7aoYMzmDqNUBwLthXHHfT_SHNhA5xTr7NT_mJYPwP3Fhe8BcmqRXaDqJCE5DBeaCsWxU4Qyp8iBsu8w9BxKxg7kgtzcEauADdVjZL6rKt48c8Ow56nVzpkW4IUCrpH
+
+curl --header "Authorization: key=AIzaSyCZ31BrLMpWpdwsKG9nqKQnDpLoERZnvEc" --header "Content-Type: application/json" https://android.googleapis.com/gcm/send -d "{\"registration_ids\":[\"fsnjPn5zrY4:APA91bFw5jmbhadeJl28qEDreN7v-A_zDAIHVIapZfq1egqLYe2JjmIy0SSEoERsnG7-2Tsw8Bxp0mnYd-PHFHV-map9qdBl_QBAGrXUUBfAKDVopMOLKRE61wuh_YxfJRKrAUF50ttZ\"]}"

@@ -1,0 +1,9 @@
+{% extends "base.html" %} 
+{% block content %}
+    <form class="form-inline" action="/listeningToArduino" method="post">
+        <div class="col-md-12">
+            <button data-command="listen" class="btn btn-default btn-lg command glyphicon glyphicon-plus" type="submit"></button>
+            <span class="title">add command</span>
+        </div>
+    </form>
+{% endblock %}

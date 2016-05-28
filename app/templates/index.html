@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% block content %}
+<div class="my-app">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="my-container">
+                <button data-command="on" class="btn btn-default btn-lg command glyphicon glyphicon-eye-open" type="button"></button>
+                <span class="title">lights on</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="my-container">
+                <button data-command="off" class="btn btn-default btn-lg command glyphicon glyphicon-eye-close" type="button"></button>
+                <span class="title">lights off</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="my-container">
+                <button data-command="play" class="btn btn-info btn-lg command glyphicon glyphicon-music" type="button"></button>
+                <span class="title">play music</span>
+            </div>
+        </div>
+    </div>
+    <label id="lbl_res"></label>
+</div>
+{% endblock %}
