@@ -24,3 +24,11 @@
     <label id="lbl_res"></label>
 </div>
 {% endblock %}
+
+{% block script %}
+    <script>
+        $(function(){
+            responsiveVoice.speak("Hello, I am Alfred. How may I assist you?", "US English Male", {rate: 1})
+        });
+    </script>
+{% endblock %}

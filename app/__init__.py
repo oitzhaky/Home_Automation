@@ -11,6 +11,7 @@ class BaseModel(Model):
         database = db 
 
 class Timer(BaseModel): 
+    id
     set_time = DateTimeField() 
     end_time = DateTimeField()
  

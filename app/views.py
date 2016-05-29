@@ -54,13 +54,11 @@ def lightsOff():
 def turnMusicOn():
     file_path = os.path.normpath('app/static/music.mp3')
     os.startfile(file_path)
-    Timer.delete(end_time=datetime.now())
     return "playing music..."
 
 @app.route('/timers')
 def timers():
-    timers=Timer.select()
-    return render_template('timers.html', title='Timers', timers=timers)
+    return render_template('timers.html', title='Timers', timers=Timer.select())
 
 @app.route('/setTimer', methods = ['POST'])
 def setTimer():
@@ -71,8 +69,7 @@ def setTimer():
     Timer.create(set_time=datetime.now(), end_time=timer_date)
     time_to_wait_in_seconds = (timer_date - datetime.now()).seconds
     threading.Timer(time_to_wait_in_seconds, turnMusicOn).start()
-    #return render_template('timerWasSet.html', title='Timers')
-    return "Hi"
+    return render_template('timers.html', title='Timers', timers=Timer.select())
 
 @app.route('/subscribe', methods = ['POST', 'GET'])
 def subscribe():
