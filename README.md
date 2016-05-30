@@ -18,10 +18,23 @@ We made this using these technologies.
 ## Getting Started
 Preliminaries :
 * Python 3.x
-* virtualenv (optional)
+* virtualenv
 * flask
 
 You have to git clone this repository.
 ```
 git clone https://github.com/oitzhaky/Home_Automation.git
+```
+##Installation 
+python-serial
+```
+pip install pyserial
+```
+python-gcm
+```
+pip install python-gcm
+```
+python-peewee
+```
+pip install peewee
 ```
