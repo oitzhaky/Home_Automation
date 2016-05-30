@@ -1,9 +1,70 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+{% block head %}
+<style>
+    .button-wrapper{padding:5px}
+
+
+
+</style>
+{% endblock %}
 {% block content %}
-    <form class="form-inline" action="/listeningToArduino" method="post">
-        <div class="col-md-12">
-            <button data-command="listen" class="btn btn-default btn-lg command glyphicon glyphicon-plus" type="submit"></button>
-            <span class="title">add command</span>
-        </div>
+<div class="automatic-commands">
+    <!--<form class="form-inline" action="/receiveCommandFromArduino" method="post">-->
+    <!--<div class="col-md-12">-->
+    <!--<button data-command="listen" class="btn btn-default btn-lg command glyphicon glyphicon-plus" type="submit"></button>-->
+    <!--<span class="title">add command</span>-->
+    <!--</div>-->
+    <!--</form>-->
+
+    <form class="form-inline" action="/receiveCommandFromArduino" method="post">
+
+        <input type="text" name="command" class="form-control">
+        <button type="submit" class="btn btn-default">add</button>
     </form>
+
+    {% for command in commands %}
+    <div class="button-wrapper">
+        <button data-id="{{ command.id }}" class="btn btn-default command">{{ command.name }}</button>
+        <span type="button" data-id="{{ command.id }}" class="delete glyphicon glyphicon-remove-circle"></span>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+{% block script %}
+<script>
+function runArduinoCommand(command_id) {
+        url="/sendCommandToArduino"
+        $.post(url, {'id':command_id}, function(data) {
+            alert(data);
+            })
+            .fail(function() {
+                alert("error");
+            });
+    }
+$(function() {
+$(".automatic-commands button.command").click(function() {
+            var command_id = $(this).data("id");
+            runArduinoCommand(command_id);
+        });
+});
+
+function deleteArduinoCommand(command_id) {
+        url="/deleteArduinoCommand"
+        $.post(url, {'id':command_id}, function(data) {
+            //$("#wrapper-"+command_id).remove();
+            })
+            .fail(function() {
+                alert("error");
+            });
+    }
+$(function() {
+$(".automatic-commands .delete").click(function() {
+            var command_id = $(this).data("id");
+            deleteArduinoCommand(command_id);
+        });
+});
+
+
+
+</script>
 {% endblock %}

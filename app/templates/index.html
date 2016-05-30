@@ -1,22 +1,25 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block content %}
 <div class="my-app">
     <div class="row">
         <div class="col-md-4">
             <div class="my-container">
-                <button data-command="on" class="btn btn-default btn-lg command glyphicon glyphicon-eye-open" type="button"></button>
+                <button data-command="on" class="btn btn-default btn-lg command glyphicon glyphicon-eye-open"
+                        type="button"></button>
                 <span class="title">lights on</span>
             </div>
         </div>
         <div class="col-md-4">
             <div class="my-container">
-                <button data-command="off" class="btn btn-default btn-lg command glyphicon glyphicon-eye-close" type="button"></button>
+                <button data-command="off" class="btn btn-default btn-lg command glyphicon glyphicon-eye-close"
+                        type="button"></button>
                 <span class="title">lights off</span>
             </div>
         </div>
         <div class="col-md-4">
             <div class="my-container">
-                <button data-command="play" class="btn btn-info btn-lg command glyphicon glyphicon-music" type="button"></button>
+                <button data-command="play" class="btn btn-info btn-lg command glyphicon glyphicon-music"
+                        type="button"></button>
                 <span class="title">play music</span>
             </div>
         </div>
@@ -26,9 +29,68 @@
 {% endblock %}
 
 {% block script %}
-    <script>
+<script>
         $(function(){
             responsiveVoice.speak("Hello, I am Alfred. How may I assist you?", "US English Male", {rate: 1})
         });
-    </script>
+
+</script>
+<script>
+    function runCommand(command) {
+        switch (command) {
+            case "on":
+                url = "/lightsOn";
+                break;
+            case "off":
+                url = "/lightsOff";
+                break;
+            case "play":
+                url = "/playMusic";
+                break;
+        }
+        $.post(url, function(data) {
+                $('#lbl_res').html(data);
+        })
+            .fail(function() {
+                alert("error");
+            });
+    }
+    $(function() {
+        $('.command').click(function() {
+            var command = $(this).data("command");
+            runCommand(command);
+        });
+        if (annyang) {
+            //annyang.setLanguage(‘he’);
+            // Let's define our first command. First the text we expect, and then the function it should call
+            var commands = {
+                'lights on': function() {
+                    runCommand("on");
+                    annyang.abort();
+                    annyang.start();
+                },
+                'lights off': function() {
+                    runCommand("off");
+                    annyang.abort();
+                    annyang.start();
+                },
+                'play music': function() {
+                    runCommand("play");
+                    annyang.abort();
+                    annyang.start();
+                }
+            };
+
+            annyang.addCallback('result', function(say) {
+                //                $('#lbl_res').text(say);
+            });
+            // Add our commands to annyang
+            annyang.addCommands(commands);
+
+            // Start listening. You can call this here, or attach this call to an event, button, etc.
+            annyang.start();
+        }
+    });
+
+</script>
 {% endblock %}
