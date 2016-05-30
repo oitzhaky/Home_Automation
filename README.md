@@ -18,7 +18,7 @@ We made this using these technologies.
 Preliminaries :
 * Python 3.x
 * virtualenv
-* flask
+* Flask
 
 You have to git clone this repository.
 ```
