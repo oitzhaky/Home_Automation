@@ -11,7 +11,7 @@ We made this using these technologies.
 
 * [Jquery](https://jquery.com/)
 * [SQlite](https://www.sqlite.org)
-* [Django](https://www.djangoproject.com/) 
+* [Flask](http://flask.pocoo.org) 
 * [Peewee](http://docs.peewee-orm.com/en/latest/)
 
 ## Getting Started
