@@ -1,8 +1,4 @@
-'''
-Created on 2011-12-02
 
-@author: Bobby Wood
-'''
 
 ## import the serial library
 import serial
@@ -15,7 +11,7 @@ connected = False
 ## open the serial port that your ardiono 
 ## is connected to.
 ser = serial.Serial("COM3", 9600)
-ser.timeout = 2;
+#ser.timeout = 2;
 
 ## loop until the arduino tells us it is ready
 ## can be either with time.sleep(2)
@@ -23,11 +19,13 @@ while not connected:
     serin = ser.read()
     connected = True
 
-print ('Arduino is hooked!')
+print('Arduino is connected!')
 time.sleep(2)
 
+print('~~~~Arduino starts listening~~~~')
+
 ## Tell the arduino to send data!
-print ('Server is sending data on serial...')
+print('Server is sending command on serial...')
 ser.write(b'r')
 
 time.sleep(2)
@@ -71,6 +69,8 @@ print(' };')
 ## is finished blinking
 ##if ser.read() == '1':
 ##    ser.read()
+
+print('~~~~Arduino starts recieving~~~~')
 
 var=int(dataSize)
 ser.write(b's')
