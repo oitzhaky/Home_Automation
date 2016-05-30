@@ -9,11 +9,10 @@ This project is based on:
 ## Base Repository, Module
 We made this using these technologies.
 
-* [React](http://facebook.github.io/react/)
-* [Reflux](https://github.com/spoike/refluxjs)
-* [Immutable js](http://facebook.github.io/immutable-js/)
-* [React Router](https://github.com/rackt/react-router) v1.0.0-rc1
-* [Django](https://www.djangoproject.com/) and [Djnago REST Framework](http://www.django-rest-framework.org/)
+* [Jquery](https://jquery.com/)
+* [Jinja](http://jinja.pocoo.org)
+* [SQlite](https://www.sqlite.org)
+* [Django](https://www.djangoproject.com/) 
 
 ## Getting Started
 Preliminaries :
