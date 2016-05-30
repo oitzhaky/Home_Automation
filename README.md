@@ -10,9 +10,9 @@ This project is based on:
 We made this using these technologies.
 
 * [Jquery](https://jquery.com/)
-* [Jinja](http://jinja.pocoo.org)
 * [SQlite](https://www.sqlite.org)
 * [Django](https://www.djangoproject.com/) 
+* [Peewee](http://docs.peewee-orm.com/en/latest/)
 
 ## Getting Started
 Preliminaries :
