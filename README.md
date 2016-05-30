@@ -25,15 +25,8 @@ You have to git clone this repository.
 git clone https://github.com/oitzhaky/Home_Automation.git
 ```
 ##Installation 
-python-serial
+
 ```
-pip install pyserial
+pip install -r requirements.txt
 ```
-python-gcm
-```
-pip install python-gcm
-```
-python-peewee
-```
-pip install peewee
-```
+
