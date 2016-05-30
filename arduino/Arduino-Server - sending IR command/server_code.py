@@ -11,7 +11,7 @@ connected = False
 ## open the serial port that your ardiono 
 ## is connected to.
 ser = serial.Serial("COM3", 9600)
-#ser.timeout = 2;
+ser.timeout = 2;
 
 ## loop until the arduino tells us it is ready
 ## can be either with time.sleep(2)
@@ -70,7 +70,7 @@ print(' };')
 ##if ser.read() == '1':
 ##    ser.read()
 
-print('~~~~Arduino starts recieving~~~~')
+print('~~~~Arduino starts sending~~~~')
 
 var=int(dataSize)
 ser.write(b's')
@@ -81,7 +81,7 @@ print('on Arduino side,data Size is:', int(dataSize))
 
 for x in range(int(dataSize)-1):
     ser.write(str(data[x]).encode())
-    time.sleep(1)
+    time.sleep(0.5)
 
 #count = ser.readline().decode("utf-8")  #reads first line
 #print ('Arduino says:', count)
