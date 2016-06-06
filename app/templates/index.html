@@ -4,14 +4,14 @@
     <div class="row">
         <div class="col-md-4">
             <div class="my-container">
-                <button data-command="on" class="btn btn-default btn-lg command glyphicon glyphicon-eye-open"
+                <button onclick='responsiveVoice.speak("OK, turning lights on");' data-command="on" class="btn btn-default btn-lg command glyphicon glyphicon-eye-open"
                         type="button"></button>
                 <span class="title">lights on</span>
             </div>
         </div>
         <div class="col-md-4">
             <div class="my-container">
-                <button data-command="off" class="btn btn-default btn-lg command glyphicon glyphicon-eye-close"
+                <button onclick='responsiveVoice.speak("OK, turning lights off");' data-command="off" class="btn btn-default btn-lg command glyphicon glyphicon-eye-close"
                         type="button"></button>
                 <span class="title">lights off</span>
             </div>
@@ -31,9 +31,8 @@
 {% block script %}
 <script>
         $(function(){
-            responsiveVoice.speak("Hello, I am Alfred. How may I assist you?", "US English Male", {rate: 1})
+            setTimeout(function(){responsiveVoice.speak("Welcom. How may I assist you?")}, 250);
         });
-
 </script>
 <script>
     function runCommand(command) {
@@ -49,7 +48,7 @@
                 break;
         }
         $.post(url, function(data) {
-                $('#lbl_res').html(data);
+                //$('#lbl_res').html(data);
         })
             .fail(function() {
                 alert("error");
@@ -91,6 +90,8 @@
             annyang.start();
         }
     });
+
+
 
 </script>
 {% endblock %}

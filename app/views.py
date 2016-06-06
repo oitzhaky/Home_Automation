@@ -12,9 +12,8 @@ registrationIds = []
 global API_KEY
 API_KEY = "AIzaSyCZ31BrLMpWpdwsKG9nqKQnDpLoERZnvEc"
 
-
 # ser = serial.Serial()
-# # ser.port = '\\.\COM5'
+# #ser.port = '\\.\COM5'
 # ser.port = "COM5"
 # ser.baudrate= 9600
 # ser.timeout = 2
@@ -141,9 +140,16 @@ def recieveCommandFromArduino():
 
 @app.route('/sendCommandToArduino', methods=['POST'])
 def sendCommandToArduino():
-    command_id = request.form['id']
-    command = Command.get(Command.id == command_id)
-    return "Command Sent"
+    action_name = request.form.get('send', "delete")
+    if action_name =="send":
+        command_id = request.form['id']
+        #command = Command.get(Command.id == command_id)
+    else:
+        command_id = request.form['id']
+        command = Command.delete().where(Command.id == command_id)
+        command.execute()
+    return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
+
 
 
 @app.route('/deleteArduinoCommand', methods=['POST'])
@@ -151,4 +157,4 @@ def deleteArduinoCommand():
     command_id = request.form['id']
     command = Command.delete().where(Command.id == command_id)
     command.execute()
-    return "command deleted"
+    return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
