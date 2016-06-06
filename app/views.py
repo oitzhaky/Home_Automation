@@ -6,18 +6,12 @@ from datetime import datetime
 from datetime import timedelta
 import serial
 from gcm import GCM
+import time
 
 global registrationIds
 registrationIds = []
 global API_KEY
 API_KEY = "AIzaSyCZ31BrLMpWpdwsKG9nqKQnDpLoERZnvEc"
-
-# ser = serial.Serial()
-# #ser.port = '\\.\COM5'
-# ser.port = "COM5"
-# ser.baudrate= 9600
-# ser.timeout = 2
-# ser.open()
 
 @app.route('/push')
 def push():
@@ -110,51 +104,81 @@ def addCommand():
 
 @app.route('/receiveCommandFromArduino', methods=['POST'])
 def recieveCommandFromArduino():
-    #    ser.write(b'r')
-    #
-    #    count = ser.readline().decode("utf-8")  #reads first line
-    #    print ('Arduino says:', count)
-    #    time.sleep(3)
-    #    dataSize = ser.readline() #reads 1 bytes(size of data)
-    #    print('Data Size is:', int(dataSize))
-    #
-    #    data = []
-    #    x = 1
-    #    while x <= int(dataSize):
-    #        data.append(ser.readline().strip())
-    #        x = x + 1
-    #
-    #    print('unsigned int raw[',end="")
-    #    print(int(dataSize),end="")
-    #    print('] = ',end="")
-    #    print('{ ',end="")
-    #    for x in range(int(dataSize)-1):
-    #        print(data[x], end="")
-    #        print(',',end="")
-    #    print(' };')
+    ser = serial.Serial('COM5', 9600)
+    ser.timeout = 5
+    connected = False
+
+    while not connected:
+        serin = ser.read()
+        connected = True
+
+    print('Arduino is connected')
+    time.sleep(2)
+    print('Arduino starts listening...')
+
+    print('Server is sending a trigger command...')
+    ser.write(b'r')
+    time.sleep(0.5)
+    count = ser.readline().decode("utf-8")
+    print('Arduino says:', count)
+    time.sleep(0.5)
+    dataSize = ser.readline()
+    print('Data Size is:', int(dataSize))
+
+    data = []
+    x = 1
+    while x <= int(dataSize):
+        data.append(ser.readline().strip())
+        x = x + 1
+
+    print('closing port')
+    ser.close()
+
+    print('unsigned int raw[', end="")
+    print(int(dataSize), end="")
+    print('] = ', end="")
+    print('{ ', end="")
+    for x in range(int(dataSize) - 1):
+        print(data[x], end="")
+        print(',', end="")
+    print(' };')
 
     command_name = request.form['command']
-    Command.create(name=command_name)
+    code = str(data)
+    Command.create(name=command_name, code=code, length=dataSize)
     return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
 
 
-@app.route('/sendCommandToArduino', methods=['POST'])
+@app.route('/sendOrDeleteCommand', methods=['POST'])
 def sendCommandToArduino():
-    action_name = request.form.get('send', "delete")
-    if action_name =="send":
         command_id = request.form['id']
-        #command = Command.get(Command.id == command_id)
-    else:
-        command_id = request.form['id']
-        command = Command.delete().where(Command.id == command_id)
-        command.execute()
-    return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
+        action = request.form['action']
+        if action == "send":
+            command = Command.get(Command.id == command_id)
+            data = command.code.split(',')
+            ser = serial.Serial("COM5", 9600)
+            var = command.length
+            ser.write(b's')
+            ser.write(str(var).encode())
+            time.sleep(3)
 
+            print('unsigned int raw[', end="")
+            print(command.length, end="")
+            print('] = ', end="")
+            print('{ ', end="")
+            for x in range(command.length - 1):
+                print(data[x], end="")
+                print(',', end="")
+            print(' };')
 
+            for x in range(command.length - 1):
+                ser.write(str(data[x]).encode())
+                time.sleep(1)
 
-@app.route('/deleteArduinoCommand', methods=['POST'])
-def deleteArduinoCommand():
-    command_id = request.form['id']
-    command = Command.delete().where(Command.id == command_id)
-    command.execute()
-    return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
+            ser.close()
+
+        else:
+            command = Command.delete().where(Command.id == command_id)
+            command.execute()
+
+        return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())

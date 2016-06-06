@@ -1,52 +1,32 @@
 {% extends "base.html" %}
-{% block content %}
-    <form class="form-inline" action="/receiveCommandFromArduino" method="post">
-        <input type="text" placeholder="Add Command" name="command" class="form-control">
-        <button onclick='responsiveVoice.speak("Command Added");' type="submit" class="btn btn-secondary glyphicon glyphicon-plus"></button>
-    </form>
+{% block head %}
+<style>
+    .button-wrapper{padding:5px}
+    .delete{background:transparent;
+            border:none}
+</style>
+{% endblock %}
 
+{% block content %}
+<form class="form-inline" action="/receiveCommandFromArduino" method="post">
+    <input type="text" placeholder="Add Command" name="command" class="form-control">
+    <button onclick='responsiveVoice.speak("Please place the remote in front of the Arduino and press it");' type="submit"
+            class="btn btn-secondary glyphicon glyphicon-plus"></button>
+</form>
+<form class="form-inline" action="/sendOrDeleteCommand" method="post">
     {% for command in commands %}
-    <form class="form-inline" action="/sendCommandToArduino" method="post">
-        <button onclick='responsiveVoice.speak("Sending to Arduino");' name="send" type="submit" class="btn btn-default command">{{ command.name }}</button>
-        <span onclick='responsiveVoice.speak("Command deleted");' name="delete" type="submit" class="delete glyphicon glyphicon-remove-circle"></span>
-        <input name="id" type="hidden" val="{{ command.id }}"/>
-    </form>
+    <div class="button-wrapper">
+        <button onclick='$("#hdnId").val("{{command.id}}");responsiveVoice.speak("OK, sending to Arduino. Please wait");' name="action" value="send" type="submit"
+                class="btn btn-default command">{{ command.name }}
+        </button>
+        <button onclick='$("#hdnId").val("{{command.id}}");responsiveVoice.speak("Command deleted");' name="action" value="delete" type="submit"
+                class="delete glyphicon glyphicon-remove-circle"></button>
+    </div>
     {% endfor %}
+    <input id="hdnId" name="id" type="hidden" val=""/>
+</form>
 {% endblock %}
 
 {% block script %}
-<!--<script>-->
-<!--function runArduinoCommand(command_id) {-->
-        <!--url="/sendCommandToArduino"-->
-        <!--$.post(url, {'id':command_id}, function(data) {-->
-            <!--alert(data);-->
-            <!--})-->
-            <!--.fail(function() {-->
-                <!--alert("error");-->
-            <!--});-->
-    <!--}-->
-<!--$(function() {-->
-<!--$(".automatic-commands button.command").click(function() {-->
-            <!--var command_id = $(this).data("id");-->
-            <!--runArduinoCommand(command_id);-->
-        <!--});-->
-<!--});-->
 
-<!--function deleteArduinoCommand(command_id) {-->
-        <!--url="/deleteArduinoCommand"-->
-        <!--$.post(url, {'id':command_id}, function(data) {-->
-            <!--//$("#wrapper-"+command_id).remove();-->
-            <!--})-->
-            <!--.fail(function() {-->
-                <!--alert("error");-->
-            <!--});-->
-    <!--}-->
-<!--$(function() {-->
-<!--$(".automatic-commands .delete").click(function() {-->
-            <!--var command_id = $(this).data("id");-->
-            <!--deleteArduinoCommand(command_id);-->
-        <!--});-->
-<!--});-->
-
-<!--</script>-->
 {% endblock %}

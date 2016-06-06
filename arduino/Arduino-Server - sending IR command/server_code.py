@@ -10,7 +10,7 @@ connected = False
 
 ## open the serial port that your ardiono 
 ## is connected to.
-ser = serial.Serial("COM3", 9600)
+ser = serial.Serial("COM5", 9600)
 ser.timeout = 2;
 
 ## loop until the arduino tells us it is ready
@@ -52,6 +52,9 @@ for x in range(int(dataSize)-1):
     print(',',end="")
 print(' };')
 
+omri = str(data)
+conv = omri.split(',')
+
 # print('unsigned int raw[',end="")
 # print(int(dataSize),end="")
 # print('] = ',end="")
@@ -80,7 +83,7 @@ dataSize = ser.readline() #reads 1 bytes(size of data)
 print('on Arduino side,data Size is:', int(dataSize))
 
 for x in range(int(dataSize)-1):
-    ser.write(str(data[x]).encode())
+    ser.write(str(conv[x]).encode())
     time.sleep(0.5)
 
 #count = ser.readline().decode("utf-8")  #reads first line

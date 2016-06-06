@@ -23,6 +23,8 @@ class Timer(BaseModel):
 class Command(BaseModel):
     id
     name = CharField()
+    code = CharField()
+    length = IntegerField()
 
 def create_tables():
     db.connect()  # close?

@@ -55,7 +55,7 @@ void loop(){
         //Serial.write('1');
 
         Serial.flush();
-        Serial.print("Please place the remote in front of the Arduino and press it");
+        Serial.print("Please place the remote in front of the Arduino and press it\n");
         delay(3000);
 
         //wait for button press and send it over the serial
@@ -76,7 +76,7 @@ void loop(){
             delay(100);
             int size = Serial.parseInt();
             //Serial.println("Size is: ");
-            Serial.println(size);
+            //Serial.println(size);
             unsigned int data[size];
            //Serial.println(" { ");
            
