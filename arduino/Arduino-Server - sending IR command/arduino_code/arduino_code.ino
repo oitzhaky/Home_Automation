@@ -68,11 +68,13 @@ void loop(){
           }
         }
         delay(1000);
+  
         
         //Serial.write('c');
         break;
      
         case 's':
+            Serial.write('1');
             delay(100);
             int size = Serial.parseInt();
             //Serial.println("Size is: ");

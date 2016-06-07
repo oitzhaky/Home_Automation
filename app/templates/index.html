@@ -46,9 +46,12 @@
             case "play":
                 url = "/playMusic";
                 break;
+            case "command":
+                url = "/addCommand";
+                break;
         }
         $.post(url, function(data) {
-                //$('#lbl_res').html(data);
+                $('#lbl_res').html(data);
         })
             .fail(function() {
                 alert("error");
@@ -75,6 +78,11 @@
                 },
                 'play music': function() {
                     runCommand("play");
+                    annyang.abort();
+                    annyang.start();
+                },
+                'record': function() {
+                    runCommand("command");
                     annyang.abort();
                     annyang.start();
                 }

@@ -57,7 +57,7 @@ def turnMusicOn():
     file_path = os.path.normpath('app/static/music.mp3')
     os.startfile(file_path)
     # return "playing music..."
-
+    return render_template('index.html', title='Home Page')
 
 @app.route('/timers')
 def timers():
@@ -99,6 +99,7 @@ def subscribe():
 
 @app.route('/addCommand')
 def addCommand():
+    print("in addCommand")
     return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
 
 
@@ -156,11 +157,19 @@ def sendCommandToArduino():
         if action == "send":
             command = Command.get(Command.id == command_id)
             data = command.code.split(',')
+
             ser = serial.Serial("COM5", 9600)
+            ser.timeout = 5
+            connected = False
+
+            while not connected:
+                serin = ser.read()
+                connected = True
+
             var = command.length
             ser.write(b's')
             ser.write(str(var).encode())
-            time.sleep(3)
+            time.sleep(0.5)
 
             print('unsigned int raw[', end="")
             print(command.length, end="")
@@ -173,7 +182,7 @@ def sendCommandToArduino():
 
             for x in range(command.length - 1):
                 ser.write(str(data[x]).encode())
-                time.sleep(1)
+                time.sleep(0.5)
 
             ser.close()
 
