@@ -2,6 +2,26 @@
 char inByte;
 #include <IRremote.h>
 
+/////////////////////////////
+//VARS
+//the time we give the sensor to calibrate (10-60 secs according to the datasheet)
+int calibrationTime = 30;        
+
+//the time when the sensor outputs a low impulse
+long unsigned int lowIn;         
+
+//the amount of milliseconds the sensor has to be low 
+//before we assume all motion has stopped
+long unsigned int pause = 5000;  
+
+boolean lockLow = true;
+boolean takeLowTime;  
+
+int pirPin = 7;    //the digital pin connected to the PIR sensor's output
+//int ledPin = 8;
+
+/////////////////////////////
+
 int RECV_PIN = 11;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
@@ -13,9 +33,24 @@ void setup(){
   // Open serial connection.
   Serial.begin(9600);
   pinMode(13, OUTPUT);
-  Serial.write('1');
   irrecv.enableIRIn(); // Start the receiver
-}
+
+  pinMode(pirPin, INPUT);
+ // pinMode(ledPin, OUTPUT);
+  digitalWrite(pirPin, LOW);
+
+  //give the sensor some time to calibrate
+  Serial.print("calibrating sensor ");
+    for(int i = 0; i < calibrationTime; i++){
+      Serial.print(".");
+      delay(1000);
+      }
+    Serial.println(" done");
+    Serial.println("SENSOR ACTIVE");
+    delay(50);
+    Serial.write('1'); //Tell the server the Arduino is ready
+  }
+
 
 void dump(decode_results *results) {
   
@@ -52,7 +87,6 @@ void loop(){
         delay(500);            
         digitalWrite(13, LOW);
 
-        //Serial.write('1');
 
         Serial.flush();
         Serial.print("Please place the remote in front of the Arduino and press it\n");
@@ -90,7 +124,7 @@ void loop(){
             }
             //Serial.println(" } ");
 
-            while (1){
+            for(int j=0; j<2 ; j++){
                int khz = 38; // 38kHz carrier frequency for the NEC protocol
                irsend.sendRaw(data, sizeof(data) / sizeof(data[0]), khz); //Note the approach used to automatically calculate the size of the array.
                delay(1000);
@@ -98,6 +132,9 @@ void loop(){
               break;
        
          }
+  }else{
+        if(digitalRead(pirPin) == HIGH){
+            Serial.println("Intruder detected");  
   }
 }
 
