@@ -65,10 +65,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a onclick='responsiveVoice.speak("Here you can set as many timer as you would like");' href="/timers">timer</a></li>
-                <li><a onclick='responsiveVoice.speak("From here, you can record a command from the Arduino, or send one to it");' href="/addCommand">IR remote commands</a></li>
+                <li><a href="/timers">timer</a></li>
+                <li><a href="/addCommand">IR remote commands</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a onclick='responsiveVoice.speak("Please wait for successful registration message");' href="/subscribe">Set Alarm</a></li>
                 <li><a onclick='responsiveVoice.speak("Please wait for successful registration message");' href="/subscribe">Subscribe</a></li>
             </ul>
         </div>
@@ -89,5 +90,39 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.3.0/annyang.min.js"></script>
 
 {% block script %}{% endblock %}
+
+<script>
+    $(function() {
+        if (annyang) {
+            // Let's define our first command. First the text we expect, and then the function it should call
+            var commands = {
+                'lights on': function() {
+                    $('#index-lights-on').click();
+                },
+                'lights off': function() {
+                    $('#index-lights-off').click();
+                },
+                'play music': function() {
+                    $('#index-play').click();
+                },
+                'commands': function() {
+                    window.location="/addCommand";
+                },
+                'timer': function() {
+                    window.location="/timers";
+                },
+                'add command': function() {
+                    responsiveVoice.speak("OK. Please place the remote in front of the Arduino and press it");
+                    $('#btn-add-command').click();
+                }
+            };
+            // Add our commands to annyang
+            annyang.addCommands(commands);
+
+            // Start listening. You can call this here, or attach this call to an event, button, etc.
+            annyang.start();
+        }
+    });
+</script>
 
 </html>

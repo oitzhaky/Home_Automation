@@ -39,3 +39,11 @@
 -->
 
 {% endblock %}
+
+{% block script %}
+<script>
+        $(function(){
+            setTimeout(function(){responsiveVoice.speak("Here you can set as many timer as you would like")}, 250);
+        });
+</script>
+{% endblock %}

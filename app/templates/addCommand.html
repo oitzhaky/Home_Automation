@@ -10,13 +10,13 @@
 {% block content %}
 <form class="form-inline" action="/receiveCommandFromArduino" method="post">
     <input type="text" placeholder="Add Command" name="command" class="form-control">
-    <button onclick='responsiveVoice.speak("Please place the remote in front of the Arduino and press it");' type="submit"
+    <button id="btn-add-command" onclick='responsiveVoice.speak("Please place the remote in front of the Arduino and press it");' type="submit"
             class="btn btn-secondary glyphicon glyphicon-plus"></button>
 </form>
 <form class="form-inline" action="/sendOrDeleteCommand" method="post">
     {% for command in commands %}
     <div class="button-wrapper">
-        <button onclick='$("#hdnId").val("{{command.id}}");responsiveVoice.speak("OK, sending to Arduino. Please wait");' name="action" value="send" type="submit"
+        <button id="btn-{{command.id}}" onclick='$("#hdnId").val("{{command.id}}");responsiveVoice.speak("OK, sending to Arduino. Please wait");' name="action" value="send" type="submit"
                 class="btn btn-default command">{{ command.name }}
         </button>
         <button onclick='$("#hdnId").val("{{command.id}}");responsiveVoice.speak("Command deleted");' name="action" value="delete" type="submit"
@@ -28,5 +28,23 @@
 {% endblock %}
 
 {% block script %}
-
+<script>
+        $(function(){
+            setTimeout(function(){responsiveVoice.speak("From here, you can record a command from the Arduino, or send one to it")}, 250);
+        });
+ if (annyang) {
+            // Let's define our first command. First the text we expect, and then the function it should call
+            var commands = {
+            {% for command in commands %}
+                "{{ command.name }}": function() {
+                    $("#btn-{{command.id}}").click();
+                    annyang.abort();
+                    annyang.start();
+                },
+            {% endfor %}
+            };
+            // Add our commands to annyang
+            annyang.addCommands(commands);
+ }
+</script>
 {% endblock %}

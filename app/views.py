@@ -37,26 +37,25 @@ def writeToFile(s):
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Home Page')
+    return render_template('index.html', title='Home Page', first_time=True)
 
 
 @app.route('/lightsOn', methods=['POST'])
 def lightsOn():
     writeToFile("1")
-    return "lights on"
+    return render_template('index.html', title='Home Page')
 
 
 @app.route('/lightsOff', methods=['POST'])
 def lightsOff():
     writeToFile("0")
-    return "lights off"
+    return render_template('index.html', title='Home Page')
 
 
 @app.route('/playMusic', methods=['POST'])
 def turnMusicOn():
     file_path = os.path.normpath('app/static/music.mp3')
     os.startfile(file_path)
-    # return "playing music..."
     return render_template('index.html', title='Home Page')
 
 @app.route('/timers')
@@ -97,11 +96,9 @@ def subscribe():
         return render_template('subscribe.html', title='Subscribe')
 
 
-@app.route('/addCommand')
+@app.route('/addCommand', methods=['POST', 'GET'])
 def addCommand():
-    print("in addCommand")
     return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
-
 
 @app.route('/receiveCommandFromArduino', methods=['POST'])
 def recieveCommandFromArduino():
@@ -148,7 +145,6 @@ def recieveCommandFromArduino():
     code = str(data)
     Command.create(name=command_name, code=code, length=dataSize)
     return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
-
 
 @app.route('/sendOrDeleteCommand', methods=['POST'])
 def sendCommandToArduino():
