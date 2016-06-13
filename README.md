@@ -6,6 +6,9 @@ This project is based on:
 * **Server** - a secure web application server that will communicate and control the different appliances based on predetermined logic.
 * **Smart appliances** - full control of smart appliances based on predetermined logic. This will include microcontrollers such as Arduino.
 
+##Key features
+* 
+
 ## Base Repository, Module
 We made this using these technologies.
 
