@@ -69,7 +69,7 @@
                 <li><a href="/addCommand">IR remote commands</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a onclick='responsiveVoice.speak("Please wait for successful registration message");' href="/subscribe">Set Alarm</a></li>
+                <li><a onclick='responsiveVoice.speak("OK. Motion detector is working");' href="/motionDetector">Set Alarm</a></li>
                 <li><a onclick='responsiveVoice.speak("Please wait for successful registration message");' href="/subscribe">Subscribe</a></li>
             </ul>
         </div>
@@ -110,6 +110,9 @@
                 },
                 'timer': function() {
                     window.location="/timers";
+                },
+                'home': function() {
+                    window.location="/";
                 },
                 'add command': function() {
                     responsiveVoice.speak("OK. Please place the remote in front of the Arduino and press it");

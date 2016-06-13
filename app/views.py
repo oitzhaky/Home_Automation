@@ -34,7 +34,6 @@ def writeToFile(s):
     num = file.close()
     print(num)
 
-
 @app.route('/')
 def index():
     return render_template('index.html', title='Home Page', first_time=True)
@@ -57,6 +56,7 @@ def turnMusicOn():
     file_path = os.path.normpath('app/static/music.mp3')
     os.startfile(file_path)
     return render_template('index.html', title='Home Page')
+
 
 @app.route('/timers')
 def timers():
@@ -96,9 +96,37 @@ def subscribe():
         return render_template('subscribe.html', title='Subscribe')
 
 
+@app.route('/setAlarm')
+def setAlarm():
+    threading.Timer(0, motionDetector).start()
+    return render_template('index.html', title='Home Page')
+
+@app.route('/motionDetector')
+def motionDetector():
+    ser = serial.Serial('COM5', 9600)
+    ser.timeout = 5
+    connected = False
+
+    while not connected:
+        serin = ser.read()
+        connected = True
+
+    ser.write(b'm')
+
+    print('Serial Opened')
+    while 1:
+        print('before line')
+        line = ser.readline().decode("utf-8")
+        print(line)
+        if line == "Intruder detected":
+            file_path = os.path.normpath('app/static/music.mp3')
+            os.startfile(file_path)
+
+
 @app.route('/addCommand', methods=['POST', 'GET'])
 def addCommand():
     return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
+
 
 @app.route('/receiveCommandFromArduino', methods=['POST'])
 def recieveCommandFromArduino():
@@ -145,6 +173,7 @@ def recieveCommandFromArduino():
     code = str(data)
     Command.create(name=command_name, code=code, length=dataSize)
     return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
+
 
 @app.route('/sendOrDeleteCommand', methods=['POST'])
 def sendCommandToArduino():
