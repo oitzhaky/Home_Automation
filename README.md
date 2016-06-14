@@ -1,13 +1,16 @@
 # **IoT Project - Smart Home**
 
 ##Overview
-This project is based on:
-* **User interface** - A web application front end that will take commands from the user and notify him with current status of the appliances and important notifications.
-* **Server** - a secure web application server that will communicate and control the different appliances based on predetermined logic.
-* **Smart appliances** - full control of smart appliances based on predetermined logic. This will include microcontrollers such as Arduino.
+The internet of things is a rapidly expanding reality.
+With an expanding number of devices available to help you automate and monitor your home, it has never before been easier to try your hand at home automation.
+The Home Automation project aims at providing one platform for accomplishing exactly this things.
 
 ##Key features
-* 
+* Responsive WebApp for iOS, Android and Windows
+* "Press & Keep": save your remotes commands on the web and use the Arduino to send them again by command
+* Movement detetction - let the Arduino keep your house safe and inform you with push notifications if needed
+* Control the lights and play music with just your voice
+* Get notified by the web application with the current status of the appliances and important notifications.
 
 ## Base Repository, Module
 We made this using these technologies.
