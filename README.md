@@ -13,7 +13,7 @@ The Home Automation project aims at providing one platform for accomplishing exa
 * Get notified by the web application with the current status of the appliances and important notifications.
 
 ## Base Repository, Module
-We made this using these technologies.
+We made this using these technologies:
 
 * [Jquery](https://jquery.com/)
 * [SQlite](https://www.sqlite.org)
