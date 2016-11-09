@@ -1,106 +1,104 @@
 
+@app.route('/receiveCommandFromArduino', methods=['POST'])
+def recieveCommandFromArduino():
+    ser = serial.Serial('COM5', 9600)
+    ser.timeout = 5
+    connected = False
 
-## import the serial library
-import serial
-import time
+    while not connected:
+        serin = ser.read()
+        connected = True
 
-## Boolean variable that will represent 
-## whether or not the arduino is connected
-connected = False
+    print('Arduino is connected')
+    time.sleep(2)
+    print('Arduino starts listening...')
 
-## open the serial port that your ardiono 
-## is connected to.
-ser = serial.Serial("COM5", 9600)
-ser.timeout = 2;
-
-## loop until the arduino tells us it is ready
-## can be either with time.sleep(2)
-while not connected:
-    serin = ser.read()
-    connected = True
-
-print('Arduino is connected!')
-time.sleep(2)
-
-print('~~~~Arduino starts listening~~~~')
-
-## Tell the arduino to send data!
-print('Server is sending command on serial...')
-ser.write(b'r')
-
-time.sleep(2)
-
-count = ser.readline().decode("utf-8")  #reads first line
-print ('Arduino says:', count)
-time.sleep(3)
-dataSize = ser.readline() #reads 1 bytes(size of data)
-print('Data Size is:', int(dataSize))
-
-data = []
-x = 1
-
-while x <= int(dataSize):
-    data.append(ser.readline().strip())
-    x = x + 1
-
-print('unsigned int raw[',end="")
-print(int(dataSize),end="")
-print('] = ',end="")
-print('{ ',end="")
-for x in range(int(dataSize)-1):
-    print(data[x], end="")
-    print(',',end="")
-print(' };')
-
-omri = str(data)
-conv = omri.split(',')
-
-# print('unsigned int raw[',end="")
-# print(int(dataSize),end="")
-# print('] = ',end="")
-# print('{ ',end="")
-# #printing the array of data
-# for num in range(1, int(dataSize)):
-#     #print(int.from_bytes(ser.read(), byteorder='big'))
-#     print(int(ser.readline()),end="")
-#     print(',',end="")
-#     time.sleep(0.5)
-# print(' };')
-
-
-## Wait until the arduino tells us it
-## is finished blinking
-##if ser.read() == '1':
-##    ser.read()
-
-print('~~~~Arduino starts sending~~~~')
-
-var=int(dataSize)
-ser.write(b's')
-ser.write(str(var).encode())
-time.sleep(1)
-dataSize = ser.readline() #reads 1 bytes(size of data)
-print('on Arduino side,data Size is:', int(dataSize))
-
-for x in range(int(dataSize)-1):
-    ser.write(str(conv[x]).encode())
+    print('Server is sending a trigger command...')
+    ser.write(b'r')
     time.sleep(0.5)
+    message = ser.readline().decode("utf-8")
+    print('Arduino says:', message)
+    time.sleep(0.5)
+    dataSize = ser.readline()
+    print('Data Size is:', int(dataSize))
 
-#count = ser.readline().decode("utf-8")  #reads first line
-#print ('Arduino says:', count)
-#time.sleep(3)
+    data = []
+    x = 1
+    while x <= int(dataSize):
+        var = ser.readline().strip()
+        var = var.decode("utf-8")
+        data.append(int(var))
+        x = x + 1
 
-print('on Arduino side,unsigned int raw[',end="")
-print(int(dataSize),end="")
-print('] = ',end="")
-print('{ ',end="")
-for x in range(int(dataSize)-1):
-    print(ser.readline().strip(), end="")
-    print(',',end="")
-print(' };')
+    print('closing port')
+    ser.close()
+
+    print('unsigned int raw[', end="")
+    print(int(dataSize), end="")
+    print('] = ', end="")
+    print('{ ', end="")
+    for x in range(int(dataSize) - 1):
+        print(data[x], end="")
+        print(',', end="")
+    print(' };')
+
+    command_name = request.form['command']
+    print(str(data))
+    code = str(data).replace(" ", "")
+    Command.create(name=command_name, code=code, length=dataSize)
+    return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
 
 
+@app.route('/sendOrDeleteCommand', methods=['POST'])
+def sendCommandToArduino():
+        command_id = request.form['id']
+        action = request.form['action']
 
-## close the port and end the program
-print ('closing port')
-ser.close()
+        if action == "send":
+            command = Command.get(Command.id == command_id)
+            data = command.code.strip('[]')
+            #data = data.split(',')
+            print(data)
+
+            ser = serial.Serial("COM5", 9600)
+            ser.timeout = 5
+            connected = False
+            while not connected:
+                serin = ser.read()
+                connected = True
+
+            print("server size")
+            print(len(data.split(',')))
+            ser.write(b's')
+            ser.write(str(len(data.split(','))).encode())
+            var2 = ser.readline()
+            print("arduino size ")
+            print(var2)
+            time.sleep(0.5)
+
+            # print('unsigned int raw[', end="")
+            # print(len(data), end="")
+            # print('] = ', end="")
+            # print('{ ', end="")
+            # for x in range(len(data)):
+            #     print(data[x].encode(), end="")
+            #     print(',', end="")
+            # print(' };')
+
+            #for x in range(len(data)):
+                #ser.write(data[x].encode())
+                #time.sleep(0.3)
+                #var = ser.readline()
+                # print("next byte is:")
+                # print(var)
+
+            ser.write(data.encode())
+            print(ser.readline())
+            time.sleep(20)
+            ser.close()
+
+        else:
+            command = Command.delete().where(Command.id == command_id)
+            command.execute()
+
+        return render_template('addCommand.html', title='Listening to Arduino', commands=Command.select())
